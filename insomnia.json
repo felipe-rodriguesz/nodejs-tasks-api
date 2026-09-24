@@ -1,47 +1,18 @@
-type: collection.insomnia.rest/5.0
-schema_version: "5.1"
-name: My first collection
-meta:
-  id: wrk_a96c3a3fc8ed49e7bca988549e264470
-  created: 1783791351986
-  modified: 1783791351986
-  description: ""
-collection:
-  - url: http://localhost:3000/tasks
-    name: New Request
-    meta:
-      id: req_c8eed0d9436f4860873a68c14c2fb4ea
-      created: 1783791352929
-      modified: 1783815368679
-      isPrivate: false
-      description: ""
-      sortKey: -1783791352929
-    method: GET
-    body:
-      mimeType: application/json
-      text: |+
-        
-    headers:
-      - name: Content-Type
-        value: application/json
-    settings:
-      renderRequestBody: true
-      encodeUrl: true
-      followRedirects: global
-      cookies:
-        send: true
-        store: true
-      rebuildPath: true
-cookieJar:
-  name: Default Jar
-  meta:
-    id: jar_0c42350a0ea595b5f575185616893601a155ce82
-    created: 1783791351990
-    modified: 1783791351990
-environments:
-  name: Base Environment
-  meta:
-    id: env_0c42350a0ea595b5f575185616893601a155ce82
-    created: 1783791351989
-    modified: 1783791351989
-    isPrivate: false
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-09-24T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v10.0.0",
+  "resources": [
+    { "_id": "wrk_tasks_api", "_type": "workspace", "name": "Node.js Tasks API", "description": "Requisições para a API local de tarefas." },
+    { "_id": "env_tasks_api", "_type": "environment", "parentId": "wrk_tasks_api", "name": "Base Environment", "data": { "base_url": "http://localhost:3000" } },
+    { "_id": "fld_tasks", "_type": "request_group", "parentId": "wrk_tasks_api", "name": "Tasks" },
+    { "_id": "req_list", "_type": "request", "parentId": "fld_tasks", "name": "List tasks", "method": "GET", "url": "{{ _.base_url }}/tasks" },
+    { "_id": "req_search", "_type": "request", "parentId": "fld_tasks", "name": "Search tasks", "method": "GET", "url": "{{ _.base_url }}/tasks?search=Node" },
+    { "_id": "req_create", "_type": "request", "parentId": "fld_tasks", "name": "Create task", "method": "POST", "url": "{{ _.base_url }}/tasks", "body": { "mimeType": "application/json", "text": "{\n  \"titulo\": \"Estudar Node.js\",\n  \"descricao\": \"Revisar HTTP nativo\"\n}" }, "headers": [{ "name": "Content-Type", "value": "application/json" }] },
+    { "_id": "req_update", "_type": "request", "parentId": "fld_tasks", "name": "Update task (merge fields)", "method": "PUT", "url": "{{ _.base_url }}/tasks/1", "body": { "mimeType": "application/json", "text": "{\n  \"titulo\": \"Título atualizado\"\n}" }, "headers": [{ "name": "Content-Type", "value": "application/json" }] },
+    { "_id": "req_complete", "_type": "request", "parentId": "fld_tasks", "name": "Complete task", "method": "PATCH", "url": "{{ _.base_url }}/tasks/1/complete" },
+    { "_id": "req_delete", "_type": "request", "parentId": "fld_tasks", "name": "Delete task", "method": "DELETE", "url": "{{ _.base_url }}/tasks/1" },
+    { "_id": "req_missing", "_type": "request", "parentId": "fld_tasks", "name": "Missing task (404)", "method": "DELETE", "url": "{{ _.base_url }}/tasks/999999" }
+  ]
+}

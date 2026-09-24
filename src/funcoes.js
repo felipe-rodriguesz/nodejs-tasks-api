@@ -1,6 +1,6 @@
 import { db, salvarBanco } from './database.js';
 
-export function createTask(titulo, descricao) {
+export async function createTask(titulo, descricao) {
     const novaTarefa = {
         id: db.proxId,
         titulo,
@@ -9,7 +9,7 @@ export function createTask(titulo, descricao) {
     };
     db.tarefas.push(novaTarefa);
     db.proxId++;
-    salvarBanco();
+    await salvarBanco();
     return novaTarefa;
 }
 
@@ -21,24 +21,24 @@ export function listTasks() {
     console.log(db.tarefas);
 }
 
-export function updateTask(id, novosDados) {
+export async function updateTask(id, novosDados) {
     const index = db.tarefas.findIndex(tarefa => tarefa.id === id);
     if (index === -1) {
         console.log("Tarefa não encontrada");
         return false;
     }
     db.tarefas[index] = { ...db.tarefas[index], ...novosDados };
-    salvarBanco();
+    await salvarBanco();
     return true;
 }
 
-export function deleteTask(id) {
+export async function deleteTask(id) {
     const index = db.tarefas.findIndex(tarefa => tarefa.id === id);
     if (index === -1) {
         console.log("Tarefa não encontrada");
         return false;
     }
     db.tarefas.splice(index, 1);
-    salvarBanco();
+    await salvarBanco();
     return true;
 }

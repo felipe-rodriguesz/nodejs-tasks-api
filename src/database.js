@@ -12,10 +12,10 @@ try {
     db.tarefas = dadosParseados.tarefas;
     db.proxId = dadosParseados.proxId;
 } catch (error) {
-    
+    if (error.code !== 'ENOENT') console.error('Falha ao carregar db.json:', error);
 }
 
 export async function salvarBanco() {
     const textoJSON = JSON.stringify(db);
-    await fs.writeFile('db.json', textoJSON)
+    await fs.writeFile('db.json', textoJSON);
 }

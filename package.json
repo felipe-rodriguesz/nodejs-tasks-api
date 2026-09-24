@@ -1,14 +1,14 @@
 {
-  "name": "crud_de_tarefas",
+  "name": "nodejs-tasks-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "exemplo.js",
+  "description": "REST API de tarefas em Node.js puro com persistência local em JSON.",
+  "main": "src/server.js",
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["nodejs", "rest-api", "tasks", "crud", "json"],
   "author": "",
   "license": "ISC"
 }

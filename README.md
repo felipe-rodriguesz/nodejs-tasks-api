@@ -1,75 +1,55 @@
-# 🚀 Tasks CRUD API - Node.js
+# Node.js Tasks API
 
-![Demonstração da API](./print.png)
+API REST para criação, consulta, atualização e remoção de tarefas, implementada com módulos nativos do Node.js, sem frameworks.
 
-## 📌 Sobre o projeto
-API REST para gerenciamento de tarefas, desenvolvida utilizando **Node.js puro** (sem frameworks como Express) com o objetivo de praticar os fundamentos do desenvolvimento backend.
+As tarefas são persistidas localmente no arquivo `db.json`. Esse arquivo JSON é uma persistência simples para demonstração e não é um banco de dados convencional.
 
-## ⚙️ Funcionalidades
-- Criar tarefas
-- Listar tarefas
-- Filtrar tarefas por título e descrição
-- Atualizar tarefas por completo
-- Remover tarefas
-- Marcar tarefas como concluídas
+## Requisitos e execução
 
-## 💻 Tecnologias
-- Node.js
-- JavaScript
-- HTTP (Módulo Nativo)
-- JSON e File System
-- Insomnia
-- Git/GitHub
+É necessário ter Node.js instalado. O projeto usa apenas módulos nativos e não possui dependências externas; não é necessário executar `npm install`.
 
-## 🚀 Como executar
-1. Clone este repositório:
-   ```bash
-   git clone [https://github.com/felipe-rodriguesz/nodejs-tasks-api.git]
-   ```
-2. Instale as dependências (O projeto é construído apenas com a biblioteca padrão do Node.js, não sendo necessário `npm install`).
-3. Inicie o servidor:
-   ```bash
-   npm start
-   ```
-4. A API estará escutando na porta `http://localhost:3000`.
+```bash
+git clone https://github.com/felipe-rodriguesz/nodejs-tasks-api.git
+cd nodejs-tasks-api
+npm start
+```
 
-*(Dica: Você pode importar o arquivo `insomnia.json` presente neste repositório diretamente no seu aplicativo Insomnia para ter todas as requisições configuradas!)*
+A API ficará disponível em `http://localhost:3000`. Também pode ser iniciada com `node src/server.js`. As requisições da coleção `insomnia.json` podem ser importadas no Insomnia.
 
-## 🛣️ Rotas da API
+## Funcionalidades e rotas
 
-| Método | Rota | Descrição | Exemplo de Body |
+| Método | Rota | Descrição | Corpo |
 |---|---|---|---|
-| `POST` | `/tasks` | Cria uma nova tarefa | `{"titulo": "Node", "descricao": "Estudar"}` |
-| `GET` | `/tasks` | Lista as tarefas (Aceita `?search=`) | *Nenhum* |
-| `PUT` | `/tasks/:id` | Atualiza o título e descrição | `{"titulo": "Novo", "descricao": "Novo"}` |
-| `PATCH`| `/tasks/:id/complete` | Marca a tarefa como concluída | *Nenhum* |
-| `DELETE`| `/tasks/:id` | Exclui a tarefa do banco | *Nenhum* |
+| `GET` | `/tasks` | Lista tarefas | Nenhum |
+| `GET` | `/tasks?search=Node` | Filtra por título ou descrição, sem diferenciar maiúsculas/minúsculas | Nenhum |
+| `POST` | `/tasks` | Cria tarefa com status inicial pendente | `titulo` e `descricao` como textos não vazios |
+| `PUT` | `/tasks/:id` | Atualiza/mescla os campos enviados na tarefa existente | Um ou mais entre `titulo`, `descricao` e `status`, como textos não vazios |
+| `PATCH` | `/tasks/:id/complete` | Marca a tarefa como concluída | Nenhum |
+| `DELETE` | `/tasks/:id` | Remove a tarefa | Nenhum |
 
-## 💡 Exemplos de uso (JSON)
+O `PUT` aplica os campos recebidos sobre a tarefa existente; os campos omitidos são preservados. Por exemplo, enviar apenas `{"titulo":"Novo título"}` altera somente o título.
 
-**Criando uma Tarefa (`POST /tasks`)**
+### Códigos HTTP
+
+- `200 OK`: consulta, atualização, conclusão ou exclusão concluída.
+- `201 Created`: tarefa criada.
+- `400 Bad Request`: JSON malformado ou corpo inválido para criação/atualização.
+- `404 Not Found`: rota ou tarefa inexistente.
+- `500 Internal Server Error`: falha ao processar a requisição ou gravar a persistência local.
+
+Erros são retornados em JSON com uma mensagem clara. Falhas internas são registradas no console, sem expor detalhes ou stack traces na resposta HTTP.
+
+## Exemplos
+
+Criar tarefa:
+
 ```json
 {
   "titulo": "Estudar Node.js",
-  "descricao": "Revisar os conceitos de File System e HTTP"
+  "descricao": "Revisar os módulos HTTP e File System"
 }
 ```
 
-**Filtrando Tarefas (`GET /tasks?search=Node`)**
-A API vasculha o banco e retorna apenas as tarefas que possuam a palavra "Node" no título ou na descrição (ignorando letras maiúsculas ou minúsculas).
+Buscar tarefas que contenham `Node` no título ou na descrição: `GET /tasks?search=Node`.
 
-## 🧠 O que aprendi
-Desenvolver uma API sem frameworks me forçou a entender como a internet realmente funciona "por debaixo dos panos". Neste projeto eu apliquei e consolidei os seguintes conhecimentos:
-- **Construção de API REST:** Entendimento profundo de Status Codes, Request/Response e verbos HTTP.
-- **Organização de backend:** Refatoração de um script único para uma arquitetura modular com separação de responsabilidades (Rotas, Middlewares, Controladores e Utils).
-- **Manipulação de requisições HTTP:** Uso de Streams e Buffers de forma assíncrona para lidar com a chegada do Body em requisições POST e PUT.
-- **Persistência simples:** Criação de um banco de dados local através de leitura e escrita de arquivos físicos usando o módulo nativo `fs/promises`.
-- **Tratamento de erros:** Validação de fluxos incorretos (ex: deletar IDs inexistentes, acessar rotas não cadastradas) retornando a sinalização `404 Not Found` ao cliente.
-- **Documentação técnica:** Criação de documentação (README) focada no usuário e exportação de Collection de testes (Insomnia).
-
-## 🚀 Melhorias futuras
-- Substituir o arquivo de texto (JSON) por um Banco de Dados Relacional real (PostgreSQL).
-- Implementar fluxo de autenticação e rotas privadas usando JWT (JSON Web Token).
-- Escrever testes automatizados (Unitários e de Ponta a Ponta) utilizando Vitest ou Jest.
-- Configurar documentação interativa utilizando o padrão OpenAPI (Swagger).
-- Fazer o Deploy da API na nuvem utilizando serviços como o Render.
+Corpos de criação precisam incluir `titulo` e `descricao` como textos não vazios. Corpos de atualização precisam ser objetos JSON não vazios contendo campos permitidos como textos não vazios. JSON inválido e dados inválidos recebem `400 Bad Request`.
